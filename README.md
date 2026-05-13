@@ -558,15 +558,15 @@ This explains why Gaussian Naive Bayes may still be useful despite lower accurac
 
 <div align="center">
 
-| Dataset Overview | Attrition Distribution |
+| Classification Report Results | Employee Dataset Preview |
 |---|---|
 | <img src="Pictures/1%20(1).png" width="420"> | <img src="Pictures/1%20(2).png" width="420"> |
 
-| Model Performance | Confusion Matrix Analysis |
+| Employee Attrition Distribution | Feature Importance & Correlation Analysis |
 |---|---|
 | <img src="Pictures/1%20(3).png" width="420"> | <img src="Pictures/1%20(4).png" width="420"> |
 
-| KNN Optimization | Dashboard Visualization |
+| Dataset Loading & Preprocessing | KNN Accuracy Optimization Curve |
 |---|---|
 | <img src="Pictures/1%20(5).png" width="420"> | <img src="Pictures/1%20(6).png" width="420"> |
 
