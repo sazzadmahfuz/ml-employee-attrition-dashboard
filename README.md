@@ -335,10 +335,8 @@ Without scaling, income would overpower age in Euclidean distance calculations.
 
 ---
 
-## Standardization Formula
+## Standardization Formula  ```math z = \frac{x - \mu}{\sigma} ```
 
-
-::contentReference[oaicite:0]{index=0}
 
 
 where:
@@ -375,9 +373,8 @@ using Euclidean distance.
 
 ---
 
-# Euclidean Distance Formula
+# Euclidean Distance Formula  ```math d(x,y)=\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2} ```
 
-:contentReference[oaicite:1]{index=1}
 
 The algorithm:
 
@@ -458,10 +455,7 @@ for probabilistic classification.
 
 ---
 
-## Bayes' Formula
-
-
-::contentReference[oaicite:2]{index=2}
+## Bayes' Formula  ```math P(A|B)=\frac{P(B|A)\cdot P(A)}{P(B)} ```
 
 
 The model assumes:
