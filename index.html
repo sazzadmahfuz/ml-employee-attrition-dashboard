@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Sazzad Ibna Mahfuz</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cyan:#00FFD1;--purple:#7B61FF;--green:#22C55E;--red:#EF4444;--amber:#F59E0B;--blue:#3B82F6;--bg:#07090D;--bg2:#0D1117;--bg3:#161B22;--border:rgba(0,255,209,0.12);--text:#E6EDF3;--muted:#7D8590}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+header{background:rgba(13,17,23,.95);border-bottom:0.5px solid var(--border);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}
+.logo{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--purple)}
+.back{color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:.75rem;transition:color .2s}.back:hover{color:var(--cyan)}
+main{max-width:1300px;margin:0 auto;padding:2rem}
+h1{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:700;margin-bottom:.25rem}
+.subtitle{color:var(--muted);font-size:.85rem;font-family:'JetBrains Mono',monospace;margin-bottom:2rem}
+.tabs{display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:0.5px solid var(--border)}
+.tab-btn{padding:.6rem 1.2rem;border:none;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.75rem;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;margin-bottom:-0.5px}
+.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.card{background:var(--bg3);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem}
+.card-title{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--cyan);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:750px){.grid2,.grid3{grid-template-columns:1fr}}
+.kpi{background:var(--bg2);border-radius:8px;padding:1rem;border:0.5px solid rgba(255,255,255,.06);text-align:center}
+.kpi-val{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;margin-bottom:.2rem}
+.kpi-label{font-size:.68rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.code-block{background:var(--bg2);border-radius:8px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.75;overflow-x:auto;border:0.5px solid rgba(255,255,255,.06)}
+.kw{color:#FF79C6}.fn{color:#50FA7B}.cn{color:#BD93F9}.cm{color:#6272A4;font-style:italic}.st{color:#F1FA8C}.nm{color:#FFB86C}.ty{color:#8BE9FD}
+.ctrl-btn{padding:.45rem 1rem;border:0.5px solid var(--border);border-radius:6px;background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:.72rem;cursor:pointer;transition:all .2s;margin-right:.4rem;margin-bottom:.4rem}
+.ctrl-btn:hover,.ctrl-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(123,97,255,.06)}
+/* Confusion matrix */
+.cm-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;max-width:200px}
+.cm-cell{padding:.6rem;border-radius:4px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700}
+footer{text-align:center;padding:2rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted)}
+footer a{color:var(--cyan);text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">MACHINE LEARNING</div>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted)">Python · Scikit-learn · KNN · Naive Bayes · IBM HR Dataset</span>
+  <a href="../../index.html" class="back">← Portfolio</a>
+</header>
+<main>
+  <h1>Employee Attrition Prediction</h1>
+  <p class="subtitle">// Introduction to Machine Learning — HAMK · IBM HR Analytics Dataset · KNN vs Gaussian Naive Bayes</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('eda')">EDA &amp; Dataset</button>
+    <button class="tab-btn" onclick="showTab('models')">Model Results</button>
+    <button class="tab-btn" onclick="showTab('kopt')">K Optimisation</button>
+    <button class="tab-btn" onclick="showTab('code')">Python Code</button>
+  </div>
+
+  <!-- ── EDA ── -->
+  <div class="tab-pane active" id="tab-eda">
+    <div class="grid3" style="margin-bottom:1rem">
+      <div class="kpi"><div class="kpi-val" style="color:var(--cyan)">1,470</div><div class="kpi-label">Total employees</div></div>
+      <div class="kpi"><div class="kpi-val" style="color:var(--red)">237</div><div class="kpi-label">Left (Attrition = Yes)</div></div>
+      <div class="kpi"><div class="kpi-val" style="color:var(--green)">83.9%</div><div class="kpi-label">Class 0 (Stayed)</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Attrition Distribution — Class Imbalance</div>
+        <div style="height:220px"><canvas id="attrChart"></canvas></div>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;font-family:'JetBrains Mono',monospace">⚠ Class imbalance: only 16.1% attrition. Accuracy alone misleads — recall for minority class is the critical metric.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Feature Categories (35 features after OHE)</div>
+        <div style="height:220px"><canvas id="featChart"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Pipeline Steps</div>
+      <div id="pipelineSteps" style="display:flex;gap:0;flex-wrap:wrap;align-items:center;row-gap:.4rem"></div>
+    </div>
+  </div>
+
+  <!-- ── MODELS ── -->
+  <div class="tab-pane" id="tab-models">
+    <div style="margin-bottom:.75rem">
+      <button class="ctrl-btn active" id="btn-knn" onclick="showModel('knn')">🤖 KNN (k=7)</button>
+      <button class="ctrl-btn" id="btn-nb" onclick="showModel('nb')">📊 Gaussian Naive Bayes</button>
+      <button class="ctrl-btn" id="btn-cmp" onclick="showModel('cmp')">⚖ Compare Both</button>
+    </div>
+    <div id="model-knn">
+      <div class="grid3" style="margin-bottom:1rem">
+        <div class="kpi"><div class="kpi-val" style="color:var(--green)">85.0%</div><div class="kpi-label">Accuracy</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--amber)">11%</div><div class="kpi-label">Recall (Attrition=Yes)</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--blue)">K = 7</div><div class="kpi-label">Best K value</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Confusion Matrix — KNN (k=7)</div>
+          <div style="display:flex;gap:2rem;align-items:center">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:.4rem;text-align:center">Predicted →</div>
+              <div class="cm-grid">
+                <div class="cm-cell" style="background:rgba(34,197,94,.2);color:var(--green)">TN<br>233</div>
+                <div class="cm-cell" style="background:rgba(239,68,68,.15);color:var(--red)">FP<br>8</div>
+                <div class="cm-cell" style="background:rgba(239,68,68,.15);color:var(--red)">FN<br>36</div>
+                <div class="cm-cell" style="background:rgba(34,197,94,.2);color:var(--green)">TP<br>17</div>
+              </div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--muted);margin-top:.3rem;text-align:center">← Actual</div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;line-height:2;color:var(--muted)">
+              <div>Precision (Yes): <span style="color:var(--cyan)">68%</span></div>
+              <div>Recall (Yes): <span style="color:var(--amber)">32%</span></div>
+              <div>F1 (Yes): <span style="color:var(--purple)">43%</span></div>
+              <div>Precision (No): <span style="color:var(--green)">87%</span></div>
+              <div>Recall (No): <span style="color:var(--green)">97%</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Classification Report — KNN</div>
+          <div style="height:180px"><canvas id="knnReport"></canvas></div>
+        </div>
+      </div>
+    </div>
+    <div id="model-nb" style="display:none">
+      <div class="grid3" style="margin-bottom:1rem">
+        <div class="kpi"><div class="kpi-val" style="color:var(--amber)">61.6%</div><div class="kpi-label">Accuracy</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--green)">74%</div><div class="kpi-label">Recall (Attrition=Yes)</div></div>
+        <div class="kpi"><div class="kpi-val" style="color:var(--muted)">Gaussian</div><div class="kpi-label">NB kernel</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Confusion Matrix — Naive Bayes</div>
+          <div style="display:flex;gap:2rem;align-items:center">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:.4rem;text-align:center">Predicted →</div>
+              <div class="cm-grid">
+                <div class="cm-cell" style="background:rgba(34,197,94,.2);color:var(--green)">TN<br>150</div>
+                <div class="cm-cell" style="background:rgba(239,68,68,.15);color:var(--red)">FP<br>91</div>
+                <div class="cm-cell" style="background:rgba(239,68,68,.15);color:var(--red)">FN<br>21</div>
+                <div class="cm-cell" style="background:rgba(34,197,94,.2);color:var(--green)">TP<br>32</div>
+              </div>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.75rem;line-height:2;color:var(--muted)">
+              <div>Precision (Yes): <span style="color:var(--amber)">26%</span></div>
+              <div>Recall (Yes): <span style="color:var(--green)">60%</span></div>
+              <div>F1 (Yes): <span style="color:var(--amber)">36%</span></div>
+              <div style="margin-top:.3rem;color:var(--text)">Better recall for minority class vs KNN — useful when missing attrition cases is costly.</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Observations</div>
+          <div style="font-size:.82rem;color:var(--muted);line-height:1.7">
+            <p>Despite lower overall accuracy, Naive Bayes catches <strong style="color:var(--green)">60% of at-risk employees</strong> vs KNN's 32%.</p>
+            <p style="margin-top:.5rem">Trade-off: NB generates more false positives (91 vs 8), meaning extra HR interventions — but in attrition prediction, false negatives (missing someone who leaves) are more costly.</p>
+            <p style="margin-top:.5rem">Conclusion: <strong style="color:var(--text)">KNN wins on overall accuracy; NB wins on minority-class recall.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="model-cmp" style="display:none">
+      <div class="card">
+        <div class="card-title">Model Comparison — KNN vs Gaussian Naive Bayes</div>
+        <div style="height:280px"><canvas id="cmpChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── K OPTIMISATION ── -->
+  <div class="tab-pane" id="tab-kopt">
+    <div class="card">
+      <div class="card-title">KNN Accuracy vs K value (k = 1 to 20)</div>
+      <div style="height:280px"><canvas id="koptChart"></canvas></div>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:.75rem">Optimal K = <span style="color:var(--cyan)">7</span> selected — highest accuracy 85.0% before plateau. K=1 overfits (high variance); K&gt;15 underfits.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Bias–Variance Trade-off</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted)">
+          <div><span style="color:var(--red)">Low K (K=1–3):</span> High variance, overfits training data. Memorises noise.</div>
+          <div><span style="color:var(--green)">Mid K (K=5–9):</span> Best balance. Generalises well to test set.</div>
+          <div><span style="color:var(--amber)">High K (K≥15):</span> High bias, underfits. Accuracy drops as too many neighbours dilute signal.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Feature Scaling — Why StandardScaler?</div>
+        <div style="font-size:.82rem;line-height:1.8;color:var(--muted)">KNN is a <strong style="color:var(--text)">distance-based algorithm</strong>. Without scaling, features with large ranges (e.g. Monthly Income: 1,000–20,000) dominate distance calculations over features with small ranges (e.g. Age: 18–60).<br><br>StandardScaler transforms each feature to <span style="color:var(--cyan)">μ=0, σ=1</span>, giving all features equal weight in the Euclidean distance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CODE ── -->
+  <div class="tab-pane" id="tab-code">
+    <div class="card">
+      <div class="card-title">Full ML Pipeline — Python + Scikit-learn</div>
+      <div class="code-block"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.neighbors <span class="kw">import</span> KNeighborsClassifier
+<span class="kw">from</span> sklearn.naive_bayes <span class="kw">import</span> GaussianNB
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score, confusion_matrix, classification_report
+
+<span class="cm"># ── 1. Load & clean ──────────────────────────────────────────</span>
+df = pd.<span class="fn">read_csv</span>(<span class="st">'WA_Fn-UseC_-HR-Employee-Attrition.csv'</span>)
+df.<span class="fn">drop</span>([<span class="st">'EmployeeCount'</span>, <span class="st">'EmployeeNumber'</span>, <span class="st">'Over18'</span>, <span class="st">'StandardHours'</span>],
+      axis=<span class="nm">1</span>, inplace=<span class="kw">True</span>)          <span class="cm"># remove constant columns</span>
+
+<span class="cm"># ── 2. Encode target + OHE categorical features ──────────────</span>
+df[<span class="st">'Attrition'</span>] = df[<span class="st">'Attrition'</span>].<span class="fn">map</span>({<span class="st">'Yes'</span>: <span class="nm">1</span>, <span class="st">'No'</span>: <span class="nm">0</span>})
+df = pd.<span class="fn">get_dummies</span>(df, drop_first=<span class="kw">True</span>)   <span class="cm"># avoids dummy variable trap</span>
+
+<span class="cm"># ── 3. Train / test split (80 / 20) ─────────────────────────</span>
+X = df.<span class="fn">drop</span>(<span class="st">'Attrition'</span>, axis=<span class="nm">1</span>)
+y = df[<span class="st">'Attrition'</span>]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="nm">0.2</span>, random_state=<span class="nm">42</span>
+)
+
+<span class="cm"># ── 4. Scale features (essential for KNN) ───────────────────</span>
+scaler = StandardScaler()
+X_train_s = scaler.<span class="fn">fit_transform</span>(X_train)
+X_test_s  = scaler.<span class="fn">transform</span>(X_test)
+
+<span class="cm"># ── 5. KNN — optimise K ──────────────────────────────────────</span>
+accuracies = []
+<span class="kw">for</span> k <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">21</span>):
+    knn = KNeighborsClassifier(n_neighbors=k)
+    knn.<span class="fn">fit</span>(X_train_s, y_train)
+    accuracies.<span class="fn">append</span>(accuracy_score(y_test, knn.<span class="fn">predict</span>(X_test_s)))
+
+best_k = accuracies.<span class="fn">index</span>(<span class="fn">max</span>(accuracies)) + <span class="nm">1</span>  <span class="cm"># → k=7</span>
+
+<span class="cm"># ── 6. Final KNN model ───────────────────────────────────────</span>
+knn_best = KNeighborsClassifier(n_neighbors=<span class="nm">7</span>)
+knn_best.<span class="fn">fit</span>(X_train_s, y_train)
+y_pred_knn = knn_best.<span class="fn">predict</span>(X_test_s)
+<span class="fn">print</span>(<span class="st">f"KNN Accuracy: {accuracy_score(y_test, y_pred_knn):.3f}"</span>)
+
+<span class="cm"># ── 7. Gaussian Naive Bayes ──────────────────────────────────</span>
+nb = GaussianNB()
+nb.<span class="fn">fit</span>(X_train_s, y_train)
+y_pred_nb = nb.<span class="fn">predict</span>(X_test_s)
+<span class="fn">print</span>(<span class="st">f"NB Accuracy:  {accuracy_score(y_test, y_pred_nb):.3f}"</span>)
+
+<span class="cm"># ── 8. Compare ───────────────────────────────────────────────</span>
+<span class="fn">print</span>(classification_report(y_test, y_pred_knn))
+<span class="fn">print</span>(classification_report(y_test, y_pred_nb))</div>
+    </div>
+  </div>
+</main>
+<footer>Machine Learning · <a href="https://github.com/sazzadmahfuz/ml-employee-attrition">github.com/sazzadmahfuz/ml-employee-attrition</a> · Python · Scikit-learn · HAMK</footer>
+
+<script>
+function showTab(id){document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',['eda','models','kopt','code'][i]===id));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');}
+
+// Render pipeline steps
+(function(){
+  const steps = ['Load CSV','Drop constants','Encode target','One-Hot Encode','Train/Test 80/20','StandardScaler','KNN (k=7)','GaussianNB','Evaluate'];
+  const el = document.getElementById('pipelineSteps');
+  if (!el) return;
+  el.innerHTML = steps.map((s,i) =>
+    `<div style="display:flex;align-items:center;margin-bottom:.3rem">
+       <div style="background:rgba(123,97,255,.15);border:0.5px solid rgba(123,97,255,.4);border-radius:6px;padding:.35rem .7rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#BD93F9;white-space:nowrap">${s}</div>
+       ${i < steps.length-1 ? '<div style="color:rgba(123,97,255,.5);margin:0 4px;font-size:.9rem">&#8594;</div>' : ''}
+     </div>`
+  ).join('');
+})();
+function showModel(m){['knn','nb','cmp'].forEach(x=>{document.getElementById('model-'+x).style.display=m===x?'block':'none';document.getElementById('btn-'+x).classList.toggle('active',m===x);});}
+
+// Attrition chart
+new Chart(document.getElementById('attrChart').getContext('2d'),{type:'doughnut',data:{labels:['Stayed (No=0)','Left (Yes=1)'],datasets:[{data:[1233,237],backgroundColor:['rgba(34,197,94,.7)','rgba(239,68,68,.7)'],borderColor:['#22C55E','#EF4444'],borderWidth:1.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#7D8590',font:{size:9},boxWidth:10}}},cutout:'60%'}});
+
+// Feature chart
+new Chart(document.getElementById('featChart').getContext('2d'),{type:'bar',data:{labels:['Demographics','Job Info','Satisfaction','Work-Life','Performance'],datasets:[{label:'Features',data:[5,9,6,4,3],backgroundColor:['rgba(0,255,209,.6)','rgba(123,97,255,.6)','rgba(59,130,246,.6)','rgba(245,158,11,.6)','rgba(239,68,68,.6)'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:0},plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7D8590',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#7D8590',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// KNN classification report
+new Chart(document.getElementById('knnReport').getContext('2d'),{type:'bar',data:{labels:['Precision','Recall','F1-Score'],datasets:[{label:'Class 0 (Stayed)',data:[.87,.97,.92],backgroundColor:'rgba(34,197,94,.6)',borderRadius:4},{label:'Class 1 (Left)',data:[.68,.32,.43],backgroundColor:'rgba(239,68,68,.6)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:0},plugins:{legend:{labels:{color:'#7D8590',font:{size:9},boxWidth:8}}},scales:{x:{ticks:{color:'#7D8590',font:{size:9}},grid:{display:false}},y:{min:0,max:1,ticks:{color:'#7D8590',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// Comparison chart
+new Chart(document.getElementById('cmpChart').getContext('2d'),{type:'bar',data:{labels:['Overall Accuracy','Precision (Attrition)','Recall (Attrition)','F1 (Attrition)','Recall (Stayed)'],datasets:[{label:'KNN (k=7)',data:[.850,.68,.32,.43,.97],backgroundColor:'rgba(0,255,209,.6)',borderRadius:4},{label:'Gaussian NB',data:[.616,.26,.60,.36,.62],backgroundColor:'rgba(123,97,255,.6)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:500},plugins:{legend:{labels:{color:'#7D8590',font:{size:10},boxWidth:10}}},scales:{x:{ticks:{color:'#7D8590',font:{size:9}},grid:{display:false}},y:{min:0,max:1,ticks:{color:'#7D8590',font:{size:9},callback:v=>(v*100).toFixed(0)+'%'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+
+// K optimisation chart
+const kAccs=[.826,.826,.836,.836,.843,.843,.850,.843,.843,.836,.836,.830,.830,.830,.830,.830,.830,.824,.824,.824];
+new Chart(document.getElementById('koptChart').getContext('2d'),{type:'line',data:{labels:Array.from({length:20},(_,i)=>i+1),datasets:[{label:'Test Accuracy',data:kAccs,borderColor:'#00FFD1',backgroundColor:'rgba(0,255,209,.07)',borderWidth:2,pointRadius:4,pointBackgroundColor:kAccs.map((_,i)=>i===6?'#fff':'#00FFD1'),fill:true,tension:.3},{label:'Best K=7',data:kAccs.map((_,i)=>i===6?.850:null),borderColor:'transparent',backgroundColor:'transparent',pointRadius:kAccs.map((_,i)=>i===6?10:0),pointBackgroundColor:'#FF0080',pointStyle:'star'}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:500},plugins:{legend:{labels:{color:'#7D8590',font:{size:9},boxWidth:10}}},scales:{x:{title:{display:true,text:'K value',color:'#7D8590',font:{size:9}},ticks:{color:'#7D8590',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},y:{min:.78,max:.88,ticks:{color:'#7D8590',font:{size:9},callback:v=>(v*100).toFixed(1)+'%'},grid:{color:'rgba(255,255,255,.04)'}}}}});
+</script>
+</body>
+</html>
