@@ -1,4 +1,4 @@
-# 🤖 Machine Learning Employee Attrition Prediction Dashboard
+# Machine Learning Employee Attrition Prediction Dashboard
 
 <div align="center">
 
