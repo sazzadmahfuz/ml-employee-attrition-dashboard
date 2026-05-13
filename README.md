@@ -560,47 +560,84 @@ This explains why Gaussian Naive Bayes may still be useful despite lower accurac
 
 ---
 
+# Project Preview
+
+<div align="center">
+
+| Dataset Overview | Attrition Distribution |
+|---|---|
+| <img src="Pictures/1%20(1).png" width="420"> | <img src="Pictures/1%20(2).png" width="420"> |
+
+| Model Performance | Confusion Matrix Analysis |
+|---|---|
+| <img src="Pictures/1%20(3).png" width="420"> | <img src="Pictures/1%20(4).png" width="420"> |
+
+| KNN Optimization | Dashboard Visualization |
+|---|---|
+| <img src="Pictures/1%20(5).png" width="420"> | <img src="Pictures/1%20(6).png" width="420"> |
+
+</div>
+
+---
+
+# Dataset & Exploratory Analysis
+
+The project begins with detailed exploratory data analysis (EDA) using the IBM HR Analytics Employee Attrition dataset.
+
+The analysis investigates:
+
+- Employee attrition patterns
+- Feature distributions
+- HR behavior indicators
+- Class imbalance
+- Feature relationships
+- Workforce statistics
+- Business-related risk factors
+
+The dataset contains:
+
+| Category | Description |
+|---|---|
+| Demographics | Age, gender, marital status |
+| Job Information | Department, role, overtime, salary |
+| Satisfaction Metrics | Environment, relationship, job satisfaction |
+| Performance Data | Ratings, years at company, promotions |
+| Work-Life Indicators | Travel frequency, work balance |
+
+---
+
 # Interactive Dashboard System
 
-The project includes a fully interactive analytics dashboard.
+The project includes a complete real-time analytics dashboard built using:
+
+- HTML5
+- CSS3
+- JavaScript
+- Chart.js
+
+The dashboard provides:
+
+✅ Interactive charts  
+✅ KPI cards  
+✅ Confusion matrix visualization  
+✅ Attrition analytics  
+✅ K optimization graphs  
+✅ Classification reports  
+✅ Responsive analytics interface  
+✅ Live model comparison panels
 
 ---
 
-# Dashboard Components
+# Visualization Features
 
-| Component | Purpose |
+| Visualization | Purpose |
 |---|---|
-| KPI Cards | High-level ML metrics |
-| Donut Charts | Attrition distribution |
-| Bar Charts | Feature analysis |
+| Donut Charts | Attrition distribution analysis |
+| KPI Cards | ML performance indicators |
 | Line Charts | K optimization visualization |
-| Confusion Matrices | Classification evaluation |
-| Pipeline Diagrams | Workflow representation |
-| Model Comparison Charts | Performance comparison |
-
----
-
-# Data Visualization Features
-
-The dashboard uses:
-
-### Chart.js
-
-for interactive rendering.
-
----
-
-## Visualization Capabilities
-
-✅ Real-time chart updates  
-✅ Dynamic KPI rendering  
-✅ Responsive layout system  
-✅ Multi-model comparison  
-✅ Animated chart rendering  
-✅ Interactive confusion matrices  
-✅ Classification metric charts  
-✅ Pipeline visualization  
-✅ HR analytics dashboards
+| Bar Charts | Classification metric comparison |
+| Confusion Matrix | Prediction accuracy analysis |
+| Pipeline Diagrams | ML workflow representation |
 
 ---
 
